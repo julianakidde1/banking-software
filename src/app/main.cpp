@@ -14,29 +14,21 @@ int main(){
     std::map<std::string, BankAccount*> accts;
 
     while(!finished){
-        std::cout<<"Options"<<std::endl;
-        std::cout<<"0) Exit"<<std::endl;
-        std::cout<<"1) Make account"<<std::endl;
-        std::cout<<"2) Deposit to existing account"<<std::endl;
-        std::cout<<"3) Withdraw from existing account"<<std::endl;
-        std::cout<<"4) Display existing account"<<std::endl;
-        std::cout<<"5) Accrue Interest"<<std::endl;
-        std::cout<<"6) Write a check"<<std::endl;
-        std::cout<<"What would you like to do (Input single number):"<<std::endl;
 
-        std::string input_string;
-        std::cin>> input_string;
+ 
+        std::string input_string = getOption();
+        
         if(input_string == "0"){
-            std::cout << "Thank you for using the software" << std::endl;
+
+            statusMessage("Thank you for using the software");
             finished = true;
         }
         else if(input_string == "1"){
-            std::cout << "Enter the username:"; 
-            std::string user;
-            std::cin>> user;
+
+            std::string user = getString("Enter the username: ");
 
             if(accts.find(user) != accts.end()){
-                std::cout << "Sorry, that username is taken" << std::endl;
+                errorMessage("Sorry, that username is taken");
             }
             else{
                 BankAccount* acct = make_account();
@@ -47,61 +39,41 @@ int main(){
             }
         }  
         else if(input_string == "2"){
-            std::cout << "Enter the username:"; 
-            std::string user;
-            std::cin>> user;
+
+            std::string user = getString("Enter the username: ");
 
             if(accts.find(user) != accts.end()){
-                std::cout << "Enter amount:";
-                std::string deposit_amount_string;
-                std::cin>> deposit_amount_string;
+
+                double deposit_amount = getDouble("Enter Ammount: ");
                 
-                char *end;
-                double deposit_amount = strtod(deposit_amount_string.c_str(), &end);
-                if(*end == '\0'){
-                    accts[user]->deposit(deposit_amount);
-                }
-                else{
-                    std::cout << "I'm sorry, that is not a deposit amount." << std::endl;
-                }
+                accts[user]->deposit(deposit_amount);
+            
             }
             else{
-                std::cout << "I'm sorry, that account does not exist" << std::endl;
+                errorMessage("I'm sorry, that account does not exist");
             }
         }
         else if(input_string == "3"){
-            std::cout << "Enter the username:"; 
-            std::string user;
-            std::cin>> user;
+    
+            std::string user = getString("Enter the username: ");
 
             if(accts.find(user) != accts.end()){
-                std::cout << "Enter amount:";
-                std::string withdrawal_amount_string;
-                std::cin>> withdrawal_amount_string;
-                
-                char *end;
-                double withdrawal_amount = strtod(withdrawal_amount_string.c_str(), &end);
-                if(*end == '\0'){
-                    accts[user]->withdrawal(withdrawal_amount);
-                }
-                else{
-                    std::cout << "I'm sorry, that is not a withdrawal amount." << std::endl;
-                }
+
+                double withdrawal_amount = getDouble("Enter Ammount: ");
+                accts[user]->withdrawal(withdrawal_amount);
             }
             else{
-                std::cout << "I'm sorry, that account does not exist" << std::endl;
+                errorMessage("I'm sorry, that account does not exist");
             }
         }
         else if(input_string == "4"){
-            std::cout << "Enter the username:"; 
-            std::string user;
-            std::cin>> user;
+            std::string user = getString("Enter the username: ");
 
             if(accts.find(user) != accts.end()){
                 std::cout<<accts[user]->toString()<<std::endl;
             }
             else{
-                std::cout << "I'm sorry, that account does not exist" << std::endl;
+                errorMessage("I'm sorry, that account does not exist");
             }
         }
         else if(input_string == "5"){
@@ -115,47 +87,36 @@ int main(){
             }
         }
         else if(input_string == "6"){
-            std::cout << "Enter the username of the account writing the check:"; 
-            std::string user;
-            std::cin>> user;
+
+            std::string user = getString("Enter the username of the account writing the check: ");
 
             if(accts.find(user) != accts.end()){
                 BankAccount *acct = accts[user];
 
                 if(dynamic_cast<CheckingAccount*>(acct)){
                     CheckingAccount *c = dynamic_cast<CheckingAccount*>(acct);
-                    std::cout << "Enter the username of the account cashing the check:"; 
-                    std::string target_account;
-                    std::cin>> target_account;
+         
+                    std::string target_account = getString("Enter the username of the account cashing the check:");
 
                     if(accts.find(user) != accts.end()){
-                        std::cout << "Enter amount:";
-                        std::string check_amount_string;
-                        std::cin>> check_amount_string;
-                        
-                        char *end;
-                        double check_amount = strtod(check_amount_string.c_str(), &end);
-                        if(*end == '\0'){
-                            c->writeCheck(*accts[user], check_amount);
-                        }
-                        else{
-                            std::cout << "I'm sorry, that is not a withdrawal amount." << std::endl;
-                        }
+              
+                        double check_amount = getDouble("Enter Ammount: ");
+                        c->writeCheck(*accts[user], check_amount);
                     }
                     else {
-                        std::cout << "The given account does not exist" << std::endl;
+                        errorMessage("The given account does not exist");
                     }
                 }
                 else{
-                    std::cout << "The given account is not a checking account" << std::endl;
+                    errorMessage("The given account is not a checking account");   
                 }
             }
             else{
-                std::cout << "I'm sorry, that account does not exist" << std::endl;
+                errorMessage("I'm sorry, that account does not exist");
             }
         }
         else{
-            std::cout << "I'm sorry, that is not a valid choice." << std::endl;
+            errorMessage("I'm sorry, that is not a valid choice.");
         }
     }
 
@@ -168,3 +129,4 @@ int main(){
 
     return 0;
 }
+
