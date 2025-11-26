@@ -20,6 +20,9 @@ public:
 
     virtual std::string toString() = 0;
 
+    //*********Task 5 
+    virtual std::string serialize() = 0; // pure virtual 
+
     virtual ~BankAccount() {};
 
 private:
