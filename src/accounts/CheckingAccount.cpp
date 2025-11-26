@@ -18,3 +18,11 @@ std::string CheckingAccount::toString(){
 std::list<double> CheckingAccount::getCheckLog(){
     return checkLog;
 }
+
+//*********Task 5 
+std::string CheckingAccount::serialize()
+{ 
+   //drafting:...std::string printed_string = getFirstName() + ","+ getLastName() + "," + getCheckLog() ;
+    return std::string();
+}
+/// ********************************************

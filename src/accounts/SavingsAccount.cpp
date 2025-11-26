@@ -17,6 +17,13 @@ std::string SavingsAccount::toString(){
     return "Savings Account Balance: $" + std::to_string(getBalance()) + ", Interest Rate: "+std::to_string(interestRate);
 }
 
+//*********Task 5 
+std::string SavingsAccount::serialize()
+{
+    return std::string();
+}
+/// ********************************************
+
 double SavingsAccount::getInterestRate(){
     return interestRate;
 }

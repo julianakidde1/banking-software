@@ -15,6 +15,9 @@ public:
 
     std::list<double> getCheckLog();
 
+    //*********Task 5 
+    std::string serialize() override; // overriden 
+
     ~CheckingAccount() {}
 
 private:
