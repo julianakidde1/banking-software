@@ -2,6 +2,7 @@
 #include "CheckingAccount.hpp"
 #include "SavingsAccount.hpp"
 #include "Utils.hpp"
+#include "AccountManager.hpp" //Task 6
 
 #include <iostream>
 #include <map>
@@ -12,6 +13,8 @@ int main(){
     bool finished = false;
 
     std::map<std::string, BankAccount*> accts;
+    
+    AccountManager manager; // Task 6
 
     while(!finished){
 
@@ -19,9 +22,12 @@ int main(){
         std::string input_string = getOption();
         
         if(input_string == "0"){
+            // Task 6: Calling the serialize function to save the accounts before the app exits
+            manager.serialize("accounts.csv");
 
             statusMessage("Thank you for using the software");
             finished = true;
+
         }
         else if(input_string == "1"){
 
