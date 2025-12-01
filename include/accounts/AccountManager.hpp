@@ -3,6 +3,7 @@
 
 #include <string>
 #include <map>
+#include <fstream> //task 5
 #include "BankAccount.hpp"
 
 class AccountManager{
@@ -16,6 +17,10 @@ public:
     void addInterest();
     void writeCheck(std::string checkWriter, std::string checkReceiver, double amount);
     int getNumAccounts();
+
+    ///Task 5 ****
+    void serialize(std::string filename);
+    
     ~AccountManager();
 
 
