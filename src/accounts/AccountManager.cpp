@@ -119,6 +119,81 @@ void AccountManager::serialize(std::string filename){
     statusMessage("Accounts successfully serialized to file.");
 }
 
+// Task 7
+
+void AccountManager::deserialize(std::string filename){
+   std::ifstream file(filename);
+
+
+   if (!file.is_open()) {
+       std::cout << "Error: Could not open file for reading." << std::endl;
+       return;
+   }
+
+
+   std::string line;
+
+
+   while (std::getline(file, line)){
+    
+    if (line.empty())
+        continue;
+
+    std::stringstream ss(line);
+    std::string field;
+    std::vector<std::string> parts;
+
+
+    while(std::getline(ss, field, ',')){
+        parts.push_back(field);
+    }
+
+    std::string username = parts[0];
+    std::string acctType = parts[1];
+    std::string first = parts[2];
+    std::string last = parts[3];
+    double balance = std::stod(parts[4]);
+
+
+    BankAccount* account = nullptr;
+
+    if (acctType == "savings") {
+        // savings,first,last,balance,interestRate
+        double rate = std::stod(parts[5]);
+        account = new SavingsAccount(first, last, balance, rate);
+
+
+    } else if (acctType == "checkings"){
+        // checkings,first,last,balance,check1,check2,...
+        CheckingAccount* c = new CheckingAccount(first, last, balance);
+        
+        for (size_t i = 5; i < parts.size(); i++)
+        {
+            double amount = std::stod(parts[i]);
+            c->getCheckLog().push_back(amount);
+        }
+
+        account = c;
+
+
+    } else {
+        std::cout << "Unknown account type." << acctType << std::endl;
+    }
+
+
+    if (account != nullptr) {
+        accountmanager[username] = account;
+        numAccounts += 1; 
+    }
+
+    file.close();
+    std::cout << "Status: Accounts successfully deserialized from file." << std::endl;
+
+   }
+
+
+}
+
 AccountManager::~AccountManager(){
     for (auto const& pair : accountmanager){
         delete pair.second;
