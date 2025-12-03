@@ -4,6 +4,8 @@
 #include <string>
 #include <map>
 #include <fstream> //task 5
+#include <sstream> // task 7
+#include <vector> // task 7
 #include "BankAccount.hpp"
 
 class AccountManager{
@@ -20,6 +22,10 @@ public:
 
     ///Task 5 ****
     void serialize(std::string filename);
+
+    //Task 7
+    void AccountManager::deserialize(std::string filename);
+
     
     ~AccountManager();
 
