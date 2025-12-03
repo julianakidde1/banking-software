@@ -1,115 +1,66 @@
 #include "BankAccount.hpp"
 #include "CheckingAccount.hpp"
 #include "SavingsAccount.hpp"
-#include "AccountManager.hpp"
 #include "Utils.hpp"
+#include "AccountManager.hpp" //Task 6
 
 #include <iostream>
-#include <map>
+
 
 int main(){
     std::cout<<"Welcome to the banking software!"<<std::endl;
 
     bool finished = false;
-
-    AccountManager am;
+    
+    AccountManager manager; // Task 6
 
     while(!finished){
-        std::cout<<"Options"<<std::endl;
-        std::cout<<"0) Exit"<<std::endl;
-        std::cout<<"1) Make account"<<std::endl;
-        std::cout<<"2) Deposit to existing account"<<std::endl;
-        std::cout<<"3) Withdraw from existing account"<<std::endl;
-        std::cout<<"4) Display existing account"<<std::endl;
-        std::cout<<"5) Accrue Interest"<<std::endl;
-        std::cout<<"6) Write a check"<<std::endl;
-        std::cout<<"What would you like to do (Input single number):"<<std::endl;
 
-        std::string input_string;
-        std::cin>> input_string;
+ 
+        std::string input_string = getOption();
+        
         if(input_string == "0"){
-            std::cout << "Thank you for using the software" << std::endl;
+            // Task 6: Calling the serialize function to save the accounts before the app exits
+            manager.serialize("accounts.csv");
+
+            statusMessage("Thank you for using the software");
             finished = true;
+
         }
         else if(input_string == "1"){
-            std::cout << "Enter the username:"; 
-            std::string user;
-            std::cin>> user;
-
-            am.addAccount(user);
+            std::string user = getString("Enter the username: ");
+            // handled by AccountManager
+            manager.addAccount(user);
         }  
         else if(input_string == "2"){
-            std::cout << "Enter the username:"; 
-            std::string user;
-            std::cin>> user;
-
-            std::cout << "Enter amount:";
-            std::string deposit_amount_string;
-            std::cin >> deposit_amount_string;
-            
-            char *end;
-            double deposit_amount = strtod(deposit_amount_string.c_str(), &end);
-            if(*end == '\0'){
-                am.makeDeposit(user, deposit_amount);
-            }
-            else{
-                std::cout << "I'm sorry, that is not a deposit amount." << std::endl;
-            }
+            std::string user = getString("Enter the username: ");
+            double amount = getDouble("Enter Amount: ");
+            manager.makeDeposit(user, amount);
         }
         else if(input_string == "3"){
-            std::cout << "Enter the username:"; 
-            std::string user;
-            std::cin>> user;
-
-            std::cout << "Enter amount:";
-            std::string withdrawal_amount_string;
-            std::cin >> withdrawal_amount_string;
-                
-            char *end;
-            double withdrawal_amount = strtod(withdrawal_amount_string.c_str(), &end);
-            if(*end == '\0'){
-                am.makeWithdrawal(user, withdrawal_amount);
-            }
-            else{
-                std::cout << "I'm sorry, that is not a withdrawal amount." << std::endl;
-            }
+            std::string user = getString("Enter the username: ");
+            double amount = getDouble("Enter Amount: ");
+            manager.makeWithdrawal(user, amount);
         }
         else if(input_string == "4"){
-            std::cout << "Enter the username:"; 
-            std::string user;
-            std::cin>> user;
-
-            am.displayAccount(user);
+            std::string user = getString("Enter the username: ");
+            manager.displayAccount(user);
         }
         else if(input_string == "5"){
-            am.addInterest();
+            manager.addInterest();
         }
         else if(input_string == "6"){
-            std::cout << "Enter the username of the account writing the check:"; 
-            std::string user;
-            std::cin>> user;
 
-            std::cout << "Enter the username of the account cashing the check:";
-            std::string target_account;
-            std::cin >> target_account;
+            std::string writer = getString("Enter the username of the account writing the check: ");
+            std::string receiver = getString("Enter the username of the account cashing the check: ");
+            double amount = getDouble("Enter amount: ");
 
-            std::cout << "Enter amount:";
-            std::string check_amount_string;
-            std::cin >> check_amount_string;
-
-            char *end;
-            double check_amount = strtod(check_amount_string.c_str(), &end);
-            if(*end == '\0'){
-                am.writeCheck(user, target_account, check_amount);
-            }
-            else{
-                std::cout << "I'm sorry, this is not a withdrawal amount." << std::endl;
-            }
+            manager.writeCheck(writer, receiver, amount);
         }
         else{
-            std::cout << "I'm sorry, that is not a valid choice." << std::endl;
+            errorMessage("I'm sorry, that is not a valid choice.");
         }
     }
-    
     return 0;
 }
+
