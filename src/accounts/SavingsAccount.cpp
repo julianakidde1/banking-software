@@ -24,3 +24,18 @@ double SavingsAccount::getInterestRate(){
 void SavingsAccount::setInterestRate(double interest){
     interestRate = interest;
 }
+
+//*********Task 5
+std::string SavingsAccount::serialize()
+{
+   // username is handled by AccountManager
+   // savings,first,last,balance,interestRate
+   return "savings," +
+          getFirstName() + "," +
+          getLastName() + "," +
+          std::to_string(getBalance()) + "," +
+          std::to_string(interestRate); //the toString function in SavingsAccount isn't used because it has additional wording
+}
+
+
+/// ********************************************

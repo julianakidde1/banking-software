@@ -41,3 +41,51 @@ BankAccount* make_account(){
     return acct;
 }
 
+//Task 3: IO Specifications
+void statusMessage (std::string a_string){
+    std::cout <<"Status:"<< a_string << std::endl;
+}
+void errorMessage (std::string a_string){
+    std::cout <<"Error:"<< a_string << std::endl;
+}    
+std::string getOption(){
+    std::string input; 
+    std::cout<<"Options"<<std::endl;
+    std::cout<<"0) Exit"<<std::endl;
+    std::cout<<"1) Make account"<<std::endl;
+    std::cout<<"2) Deposit to existing account"<<std::endl;
+    std::cout<<"3) Withdraw from existing account"<<std::endl;
+    std::cout<<"4) Display existing account"<<std::endl;
+    std::cout<<"5) Accrue Interest"<<std::endl;
+    std::cout<<"6) Write a check"<<std::endl;
+    std::cout<<"What would you like to do (Input single number):"<<std::endl;
+
+    std::cin >> input; 
+    return input; 
+
+}
+
+std::string getString (std::string a_string){
+    std::string string_input;
+    std::cout<< a_string << std::endl; 
+    std::cin >> string_input;
+
+    return string_input;
+
+}
+
+double getDouble (std::string a_string) {
+    std::string string_input;
+    std::cout<< a_string << std::endl; 
+    std::cin >> string_input;
+
+   char *end;
+        double double_input = strtod(string_input.c_str(), &end);
+        if(*end == '\0'){
+            return double_input; 
+        }
+        else{
+            std::cout << "Invalid input; it should be a double." << std::endl;
+        }
+}
+
