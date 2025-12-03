@@ -15,11 +15,11 @@ void AccountManager::addAccount(std::string username){
         if(newAccount != nullptr){
             accountmanager[username] = newAccount;
             numAccounts++;
-            std::cout << "Account created successfully for " << username << "." << std::endl;
+            statusMessage("Account created succesffully for " + username);
         }
-        else{
-            std::cout << "Error: Username " << username << " already exists." << std::endl;
-        }
+    }
+    else{
+        errorMessage("Username " + username + " is already taken.");
     }
 }
 void AccountManager::deleteAccount(std::string username){
@@ -28,10 +28,10 @@ void AccountManager::deleteAccount(std::string username){
         delete it->second;
         accountmanager.erase(it);
         numAccounts--;
-        std::cout << "Account for " << username << " deleted." << std::endl;
+        statusMessage("Account for " + username + " deleted.");
     }
     else{
-        std::cout << "Error: Account " << username << " does not exist." << std::endl;
+        errorMessage("Account " + username + " does not exist.");
     }
 
 }
@@ -41,7 +41,7 @@ void AccountManager::displayAccount(std::string username){
         std::cout << it->second->toString() << std::endl;
     }
     else{
-        std::cout << "Error: Account " << username << " does not exist." << std::endl;
+        errorMessage("Account " + username + " is already taken.");
     }
 
 }
@@ -49,22 +49,22 @@ void AccountManager::makeWithdrawal(std::string username, double amount){
     auto it = accountmanager.find(username);
     if (it != accountmanager.end()) {
         if(it->second->withdrawal(amount)){
-            std::cout << "Withdrawal successful. New balance: " << it->second->getBalance() << std::endl;
+            statusMessage("Withdrawal successful! New Balance: " + std::to_string(it->second->getBalance()));
         }
     }
     else{
-        std::cout << "Error: Account " << username << " does not exist." << std::endl;
+        errorMessage("Account " + username + " does not exist.");
     }
 }
 void AccountManager::makeDeposit(std::string username, double amount){
     auto it = accountmanager.find(username);
     if (it != accountmanager.end()) {
         if(it->second->deposit(amount)){
-            std::cout << "Deposit successful. New balance: " << it->second->getBalance() << std::endl;
+            statusMessage("Deposit successful! New Balance: " + std::to_string(it->second->getBalance()));
         }
     }
     else{
-        std::cout << "Error: Account " << username << " does not exist." << std::endl;
+        errorMessage("Account " + username + " does not exist.");
     }
 }
 void AccountManager::addInterest(){
@@ -75,7 +75,7 @@ void AccountManager::addInterest(){
             savings->accrueInterest();
         }
     }
-    std::cout << "Interest added to all savings accounts." << std::endl; 
+    statusMessage("Interest added to all savings accounts.");
 }
 void AccountManager::writeCheck(std::string checkWriter, std::string checkReceiver, double amount){
     auto writeIt = accountmanager.find(checkWriter);
@@ -85,19 +85,38 @@ void AccountManager::writeCheck(std::string checkWriter, std::string checkReceiv
         CheckingAccount* writer = dynamic_cast<CheckingAccount*>(writeIt->second);
         if(writer){
             if(writer->writeCheck(*(receiverIt->second), amount)){
-                std::cout << "Check written successfully!" << std::endl;
+                statusMessage("Check written successfully!");
             }
         }
         else{
-            std::cout << "Error: Writer account " << checkWriter << " is not a checking account." << std::endl;
+            errorMessage("Writer account " + checkWriter + " is not a checking account.");
         }
     }
     else{
-        std::cout << "Error: One or both account usernames provided do not exist." << std::endl;
+        errorMessage("One or both account usernames provided do not exist.");
     }
 }
 int AccountManager::getNumAccounts(){
     return numAccounts;
+}
+
+void AccountManager::serialize(std::string filename){
+    std::ofstream file(filename);
+
+    if (!file.is_open()){
+        std::cout << "Error: Could not open file for writing." << std::endl;
+        return;
+    }
+    else{
+        for (std::pair< std::string, BankAccount*> pair : accountmanager) {
+            std::string username = pair.first;
+            BankAccount* bAccount = pair.second;
+            file << username << "," << bAccount->serialize() << std::endl;
+        }
+    }
+
+    file.close();
+    statusMessage("Accounts successfully serialized to file.");
 }
 
 AccountManager::~AccountManager(){
