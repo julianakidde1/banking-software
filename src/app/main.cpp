@@ -13,6 +13,9 @@ int main(){
     bool finished = false;
     
     AccountManager manager; // Task 6
+    
+    // Task 7: Calling the deserialize
+    manager.deserialize("accounts.csv");
 
     while(!finished){
 
@@ -22,6 +25,7 @@ int main(){
         if(input_string == "0"){
             // Task 6: Calling the serialize function to save the accounts before the app exits
             manager.serialize("accounts.csv");
+
 
             statusMessage("Thank you for using the software");
             finished = true;

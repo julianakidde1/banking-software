@@ -24,7 +24,7 @@ public:
     void serialize(std::string filename);
 
     //Task 7
-    void AccountManager::deserialize(std::string filename);
+    void deserialize(std::string filename);
 
     
     ~AccountManager();
