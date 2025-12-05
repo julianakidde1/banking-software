@@ -25,10 +25,10 @@ BankAccount* make_account(){
         if(*end == '\0'){
             if(interest_rate > 0 && interest_rate < 1){
                 acct = new SavingsAccount(first, last, interest_rate);
-            }
         }
         else{
             std::cout << "I'm sorry, that is not a valid interest rate." << std::endl;
+            }
         }
     }
     else if(choice == "2"){
